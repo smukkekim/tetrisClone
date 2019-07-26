@@ -1,0 +1,84 @@
+:root {
+  --color-T: mediumpurple;
+  --color-O: yellow;
+  --color-L: orange;
+  --color-J: blue;
+  --color-I: cyan;
+  --color-S: lime;
+  --color-Z: red;
+  --color-frozen: palegoldenrod;
+}
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: papayawhip;
+}
+main {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'scoreboard .'
+    'gameboard info';
+}
+#GameBoard {
+  grid-area: gameboard;
+  border: 10px double brown;
+  position: relative;
+  background-color: black;
+  background-clip: padding-box;
+  .pause-message {
+    display: none;
+  }
+  &.paused {
+    .pause-message {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: fade(gray, 85%)
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 1rem,
+          gray 1rem,
+          gray 2rem
+        );
+      color: white;
+      font-size: 3rem;
+    }
+  }
+}
+#ScoreBoard {
+  grid-area: scoreboard;
+  justify-self: right;
+  font-size: 3rem;
+}
+#InfoPanel {
+  grid-area: info;
+}
+#NextDisplay {
+  border: 10px double brown;
+  position: relative;
+  background-color: black;
+  background-clip: padding-box;
+}
+.slot {
+  position: absolute;
+  background: transparent;
+}
