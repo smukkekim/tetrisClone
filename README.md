@@ -2,7 +2,7 @@
 
 ## A javascript playground project
 
-Playing around with vanilal js and parcel.
+Playing around with vanilla js and parcel.
 
 ### Running the project:
 
