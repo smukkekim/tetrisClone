@@ -1,4 +1,11 @@
 :root {
+  --color-bg: #737373;
+  --color-text: white;
+  --color-border: #3b3b3b;
+  --color-gameboard: black;
+  --color-pause-bg: #808080;
+  --color-pause-bg-pattern: rgba(128, 128, 128, 0.75);
+  --color-pause-text: white;
   --color-T: mediumpurple;
   --color-O: yellow;
   --color-L: orange;
@@ -13,26 +20,27 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: papayawhip;
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 main {
   display: grid;
   grid-template-rows: 1fr auto;
   grid-template-columns: auto 1fr;
-  grid-template-areas: 'scoreboard .' 'gameboard info';
+  grid-template-areas: "scoreboard ." "gameboard info";
 }
 #GameBoard {
   grid-area: gameboard;
-  border: 10px double brown;
+  border: 10px double var(--color-border);
   position: relative;
-  background-color: black;
+  background-color: var(--color-gameboard);
   background-clip: padding-box;
 }
 #GameBoard .pause-message {
@@ -48,8 +56,8 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(128, 128, 128, 0.85) repeating-linear-gradient(-45deg, transparent, transparent 1rem, gray 1rem, gray 2rem);
-  color: white;
+  background: var(--color-pause-bg-pattern) repeating-linear-gradient(-45deg, transparent, transparent 1rem, var(--color-pause-bg) 1rem, var(--color-pause-bg) 2rem);
+  color: var(--color-pause-text);
   font-size: 3rem;
 }
 #ScoreBoard {
@@ -61,9 +69,9 @@ main {
   grid-area: info;
 }
 #NextDisplay {
-  border: 10px double brown;
+  border: 10px double var(--color-border);
   position: relative;
-  background-color: black;
+  background-color: var(--color-gameboard);
   background-clip: padding-box;
 }
 .slot {

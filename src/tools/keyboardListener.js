@@ -1,16 +1,20 @@
 export default class KeyboardListener {
-  constructor(context = document) {
+  constructor(listeners = [], context = document) {
     this.context = context;
     this.active = false;
     this.handlers = Object.create(null);
     this.keyHandler = this.handleKey.bind(this);
     this.toggle(true);
+
+    listeners.forEach(({ key, handler }) => {
+      this.addListener(key, handler);
+    });
   }
 
   addListener(triggerKey, handler) {
     const keys = Array.isArray(triggerKey) ? triggerKey : [triggerKey];
     keys.forEach(key => {
-      if (Object.prototype.hasOwnProperty.call(this.handlers, key)) {
+      if (this.hasHandlerFor(key)) {
         this.handlers[key].push(handler);
       } else {
         this.handlers[key] = [handler];
@@ -19,15 +23,13 @@ export default class KeyboardListener {
   }
 
   handleKey(evt) {
-    var key = evt.key;
-    // console.log(key);
+    let { key } = evt;
     if (this.handlers[key]) {
       this.handlers[key].forEach(handler => handler.call());
     }
   }
 
-  toggle(state) {
-    if (typeof state !== 'boolean') state = !this.active;
+  toggle(state = !this.active) {
     this.active = state;
 
     if (this.active) {
@@ -35,5 +37,9 @@ export default class KeyboardListener {
     } else {
       this.context.removeEventListener('keydown', this.keyHandler);
     }
+  }
+
+  hasHandlerFor(key) {
+    return Object.prototype.hasOwnProperty.call(this.handlers, key);
   }
 }

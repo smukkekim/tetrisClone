@@ -1,35 +1,4 @@
-class Slot {
-  constructor(size) {
-    this.isLocked = false;
-    this.color = 'transparent';
-    this.el = document.createElement('div');
-
-    this.el.style.width = size + 'px';
-    this.el.style.height = size + 'px';
-    this.el.classList.add('slot');
-  }
-
-  render(x, y) {
-    this.el.style.left = x + 'px';
-    this.el.style.top = y + 'px';
-    this.el.style.backgroundColor = this.color;
-  }
-
-  fill(color) {
-    this.color = color;
-  }
-
-  clear(force) {
-    if (force || !this.isLocked) {
-      this.color = 'transparent';
-      this.isLocked = false;
-    }
-  }
-
-  lock() {
-    this.isLocked = true;
-  }
-}
+import Slot from './slot.js';
 
 class Board {
   constructor(width, height, scale) {
@@ -38,7 +7,7 @@ class Board {
     this.scale = scale;
     this.slots = [];
     for (let y = 0; y < height; y++) {
-      let row = new Array();
+      let row = [];
       for (let x = 0; x < width; x++) {
         row.push(new Slot(scale));
       }
@@ -47,6 +16,9 @@ class Board {
   }
 
   render(context) {
+    context.style.width = `${this.width * this.scale}px`;
+    context.style.height = `${this.height * this.scale}px`;
+
     this.slots.forEach(row =>
       row.forEach(cell => {
         context.appendChild(cell.el);
@@ -103,7 +75,7 @@ class Board {
     this.placePiece(piece);
   }
 
-  dropPiece(piece) {
+  movePieceDown(piece) {
     this.clearPiece(piece);
     piece.move(0, 1);
     if (this.isBlocked(piece)) {
@@ -113,6 +85,15 @@ class Board {
     }
     this.placePiece(piece);
     return false;
+  }
+
+  dropPiece(piece) {
+    this.clearPiece(piece);
+    while (!this.isBlocked(piece)) {
+      piece.move(0, 1);
+    }
+    piece.move(0, -1);
+    this.lockPiece(piece);
   }
 
   rotatePiece(piece, dir) {
@@ -172,19 +153,21 @@ class Board {
 
   collectRows() {
     let count = 0;
-    outer: for (let y = this.slots.length - 1; y > 0; y--) {
-      for (let x = 0; x < this.slots[y].length; x++) {
-        if (!this.slots[y][x].isLocked) {
-          continue outer;
-        }
+    for (let y = this.slots.length - 1; y > 0; y--) {
+      // for (let x = 0; x < this.slots[y].length; x++) {
+      //   if (!this.slots[y][x].isLocked) {
+      //     continue outer;
+      //   }
+      // }
+      if (!this.slots[y].some(cell => !cell.isLocked)) {
+        let row = this.slots.splice(y, 1)[0];
+        row.forEach(cell => {
+          cell.clear(true);
+        });
+        this.slots.unshift(row);
+        count++;
+        y++;
       }
-      let row = this.slots.splice(y, 1)[0];
-      row.forEach(cell => {
-        cell.clear(true);
-      });
-      this.slots.unshift(row);
-      count++;
-      y++;
     }
     return count;
   }
